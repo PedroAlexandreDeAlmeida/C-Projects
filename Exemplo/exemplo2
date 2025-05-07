@@ -1,0 +1,22 @@
+#define __SFR_OFFSET 0x00
+#include <avr/io.h>
+
+.global my_config
+.global asmloop
+
+my_config:
+ldi r18, 0x20 // carrega o valor 20h no registrador 18
+out DDRB, r18 // seta o pino 5 do PORTB
+ldi r18, 0x10 // carrega o valor 04h no registrador 18
+out PORTD, r18 // seta o pino 3 do PORTC com o PULL_UP
+ret
+
+asmloop:
+sbis PIND, 4 // verifica o pino 3 do PORTC, se 1 ignora a próxima instrução
+rjmp led_on
+cbi PORTB, 5 // limpa o pino 5
+rjmp asmloop
+
+led_on:
+sbi PORTB, 5 // seta o pino 5
+rjmp asmloop
