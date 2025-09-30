@@ -53,26 +53,48 @@ int main() {
         double a, p, x0, y0, xcalc, ycalc, C;
 
         printf("\nModelo 2 selecionado: EDO Linear de Primeira Ordem com Fator Integrante\n");
+
+        // Solicitar constantes
         printf("Digite a constante p (p(x) constante): ");
         scanf("%lf", &p);
 
         printf("Digite a constante a (g(x) = e^(a*x)): ");
         scanf("%lf", &a);
 
-        printf("Digite x0: ");
-        scanf("%lf", &x0);
-        printf("Digite y0 = y(x0): ");
-        scanf("%lf", &y0);
-
+        // Verificação do caso p + a = 0
         if (p + a == 0) {
             printf("Erro: p + a nao pode ser zero.\n");
             return 1;
         }
 
-        C = (y0 - exp(a*x0)/(p+a)) * exp(p*x0);
-        printf("\nSolucao geral: y(x) = e^(a*x)/(p+a) + C*e^(-p*x)\n");
-        printf("Constante C = %lf\n", C);
+        // Condição inicial
+        printf("Digite x0: ");
+        scanf("%lf", &x0);
+        printf("Digite y0 = y(x0): ");
+        scanf("%lf", &y0);
 
+        // Mostrar passo a passo elegante
+        printf("\nPasso a passo:\n");
+        printf("1. Fator integrante: mu(x) = e^(∫p(x) dx)\n");
+        printf("   Como p(x) é constante, ∫p(x) dx = p*x, entao mu(x) = e^(p*x)\n");
+
+        printf("2. Multiplicando a equacao pelo fator integrante:\n");
+        printf("   d/dx[y * mu(x)] = mu(x) * g(x) = e^(∫p dx) * e^(a*x)\n");
+
+        printf("3. Integrando ambos os lados:\n");
+        printf("   Integral de e^(∫p dx) * g(x) dx = Integral e^((p+a)*x) dx = e^((p+a)*x)/(p+a)\n");
+
+        printf("4. Solucao geral: y(x) = e^(ax)/(p+a) + C * e^(-∫p dx)\n");
+
+        // Calcular constante C usando condição inicial
+        C = (y0 - exp(a*x0)/(p+a)) * exp(p*x0);
+        printf("5. Usando a condicao inicial y(%.3lf) = %.3lf, obtemos C = %.3lf\n", x0, y0, C);
+
+        // Mostrar solução do PVI explicitamente
+        printf("\nResultado do PVI (solucao especifica):\n");
+        printf("y(x) = e^(%.3lf*x)/(%.3lf) + %.3lf*e^(-∫p dx)\n", a, p+a, C);
+
+        // Permitir calcular y(x') para vários x'
         char continuar;
         do {
             printf("\nDigite um valor x' para calcular y(x'): ");
