@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    int opcao;
+    printf("=== Resolucao de EDOs ===\n");
+    printf("Escolha o modelo:\n");
+    printf("1 - EDO Separavel com Solucao Exponencial\n");
+    printf("2 - EDO Linear de Primeira Ordem com Fator Integrante\n");
+    printf("Opcao: ");
+    scanf("%d", &opcao);
+
+    if (opcao == 1) {
+        // Modelo 1: EDO separável
+        double a, t, yt, k, tcalc, ycalc;
+
+        printf("\nModelo 1 selecionado: EDO Separavel com Solucao Exponencial\n");
+        printf("Digite o valor inicial y(0) = a: ");
+        scanf("%lf", &a);
+
+        printf("Digite um valor t (diferente de 0): ");
+        scanf("%lf", &t);
+        if (t == 0) {
+            printf("Erro: t nao pode ser zero.\n");
+            return 1;
+        }
+
+        printf("Digite o valor correspondente y(t): ");
+        scanf("%lf", &yt);
+        if (a == 0) {
+            printf("Erro: y(0) nao pode ser zero.\n");
+            return 1;
+        }
+
+        k = (1.0 / t) * log(yt / a);
+        printf("\nConstante k calculada: %lf\n", k);
+        printf("Funcao determinada: y(t) = %.3lf * e^(%.3lf * t)\n", a, k);
+
+        char continuar;
+        do {
+            printf("\nDigite um valor t' para calcular y(t'): ");
+            scanf("%lf", &tcalc);
+
+            ycalc = a * exp(k * tcalc);
+            printf("Resultado: y(%.3lf) = %lf\n", tcalc, ycalc);
+
+            printf("Deseja calcular outro t'? (s/n): ");
+            scanf(" %c", &continuar);
+        } while (continuar == 's' || continuar == 'S');
+    }
+    else if (opcao == 2) {
+        // Modelo 2: EDO Linear com fator integrante
+        double a, p, x0, y0, xcalc, ycalc, C;
+
+        printf("\nModelo 2 selecionado: EDO Linear de Primeira Ordem com Fator Integrante\n");
+        printf("Digite a constante p (p(x) constante): ");
+        scanf("%lf", &p);
+
+        printf("Digite a constante a (g(x) = e^(a*x)): ");
+        scanf("%lf", &a);
+
+        printf("Digite x0: ");
+        scanf("%lf", &x0);
+        printf("Digite y0 = y(x0): ");
+        scanf("%lf", &y0);
+
+        if (p + a == 0) {
+            printf("Erro: p + a nao pode ser zero.\n");
+            return 1;
+        }
+
+        C = (y0 - exp(a*x0)/(p+a)) * exp(p*x0);
+        printf("\nSolucao geral: y(x) = e^(a*x)/(p+a) + C*e^(-p*x)\n");
+        printf("Constante C = %lf\n", C);
+
+        char continuar;
+        do {
+            printf("\nDigite um valor x' para calcular y(x'): ");
+            scanf("%lf", &xcalc);
+
+            ycalc = exp(a*xcalc)/(p+a) + C*exp(-p*xcalc);
+            printf("Resultado: y(%.3lf) = %lf\n", xcalc, ycalc);
+
+            printf("Deseja calcular outro x'? (s/n): ");
+            scanf(" %c", &continuar);
+        } while (continuar == 's' || continuar == 'S');
+    }
+    else {
+        printf("\nOpcao invalida!\n");
+    }
+
+    return 0;
+}
